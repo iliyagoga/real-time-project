@@ -1,0 +1,9 @@
+.settingbar {
+  height: 40px;
+  width: 100%;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 5px gray;
+  top: 40px;
+}
