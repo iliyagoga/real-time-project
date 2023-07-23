@@ -5,10 +5,16 @@ import canvasstore from '../store/canvasstore'
 const  Canvas= observer(()=> {
     const canvasRef=useRef()
     useEffect(()=>{
-        canvasstore.setCanvas(canvasRef.current.value)
+        canvasstore.setCanvas(canvasRef.current)
     },[])
+    function screenundo(){
+        canvasstore.pushToUndo(canvasRef.current.toDataURL())
+    }
     return (<div className="canvas">
-        <canvas  ref={canvasRef}width={window.screen.width-100} height={window.screen.height-300}></canvas>
+        <canvas  
+        onTouchStart={()=>{screenundo()}}
+        onMouseDown={()=>{screenundo()}}
+        ref={canvasRef}width={window.screen.width-100} height={window.screen.height-300}></canvas>
     </div>)
   })
   

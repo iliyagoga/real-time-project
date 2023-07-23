@@ -23,6 +23,9 @@
   background-size: cover;
   margin-left: 10px;
 }
+.toolbar__bt:active {
+  margin-top: 2px;
+}
 .toolbar .brush {
   background: url("../../assets/img/brush.png") no-repeat center center;
 }
@@ -46,4 +49,4 @@
 }
 .toolbar .save {
   background: url("../../assets/img/save.png") no-repeat center center;
-}
+}/*# sourceMappingURL=toolbar.css.map */

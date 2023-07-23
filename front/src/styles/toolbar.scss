@@ -21,6 +21,9 @@
         cursor: pointer;
         background-size: cover;
         margin-left: 10px;
+        &:active{
+            margin-top: 2px;
+        }
     }
     .brush{
         background: url('../../assets/img/brush.png') no-repeat center center

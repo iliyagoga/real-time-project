@@ -9,3 +9,35 @@ canvas {
   border: 2px solid black;
   background: white;
 }
+
+.userlist {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+}
+.userlist > * {
+  margin-left: 10px;
+  padding: 10px;
+  background: white;
+  border-radius: 10px;
+  animation-name: vanish;
+  animation-duration: 10s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes vanish {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    display: block;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}/*# sourceMappingURL=canvas.css.map */
