@@ -24,6 +24,7 @@ export default class Line extends Tools{
         this.canvas.removeEventListener('touchend',this.second)
         this.canvas.removeEventListener('touchmove',this.third)
         this.canvas.removeEventListener('touchstart',this.first)
+        if(canvasstore.getMode()=='network')
         this.socket.send(JSON.stringify({
             method:'draw',
             id:  this.id,
@@ -33,10 +34,12 @@ export default class Line extends Tools{
                 x: this.currentX,
                 y: this.currentY,
                 sx: this.startX,
-                sy: this.startY
+                sy: this.startY,
+                color: toolstore._strokeColor,
+                width: toolstore._lineWidth
             }
         }))
-        
+
 
     }
     mouseDownHandler(e){
@@ -53,7 +56,6 @@ export default class Line extends Tools{
             this.startY= e.changedTouches[0].clientY-e.target.offsetTop
         }
         this.saved=this.canvas.toDataURL()
-        
     }
     mouseMoveHandler(e){
         if(this.mouseDown){
@@ -70,9 +72,8 @@ export default class Line extends Tools{
             this.currentX=currentX
             this.currentY=currentY
             this.draw(currentX,currentY)
-        }
 
-    }
+    }}
     draw(cX,cY){
         const img=new Image()
         img.src=this.saved
@@ -86,8 +87,10 @@ export default class Line extends Tools{
         }
 
      }
-     static draw2(ctx,cX,cY,sX,sY){
+     static draw2(ctx,cX,cY,sX,sY, color, width){
         ctx.beginPath()
+        ctx.lineWidth=width
+        ctx.strokeStyle=color
         ctx.moveTo(sX,sY)
         ctx.lineTo(cX,cY)
         ctx.stroke()

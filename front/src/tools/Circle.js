@@ -24,6 +24,7 @@ export default class Rect extends Tools{
         this.canvas.removeEventListener('touchend',this.second)
         this.canvas.removeEventListener('touchmove',this.third)
         this.canvas.removeEventListener('touchstart',this.first)
+        if(canvasstore.getMode()=='network')
         this.socket.send(JSON.stringify({
             method:'draw',
             id:  this.id,
@@ -32,13 +33,15 @@ export default class Rect extends Tools{
                 type: 'circle',
                 x: this.startX,
                 y: this.startY,
-                w: Math.abs(this.width)
+                w: Math.abs(this.width),
+                colorS: toolstore._strokeColor,
+                colorF: toolstore._fillColor,
+                width: toolstore._lineWidth
+                
             }
         }))
-        
-
     }
-    mouseDownHandler(e){
+    mouseDownHandler(e){{
         this.ctx.lineWidth=toolstore._lineWidth
         this.ctx.strokeStyle=toolstore._strokeColor
         this.ctx.fillStyle=toolstore._fillColor
@@ -54,8 +57,7 @@ export default class Rect extends Tools{
             this.startY= e.changedTouches[0].clientY-e.target.offsetTop
         }
         this.saved=this.canvas.toDataURL()
-        
-    }
+    }}
     mouseMoveHandler(e){
         if(this.mouseDown){
             let currentX
@@ -70,7 +72,6 @@ export default class Rect extends Tools{
             this.draw(this.startX,this.startY, width)
         }
         
-
     }
     draw(x,y,w){
         const img=new Image()
@@ -85,9 +86,12 @@ export default class Rect extends Tools{
         }
 
      }
-    static draw2(ctx, x,y,w){
+    static draw2(ctx, x,y,w, cS,cF,width){
         ctx.beginPath()
         ctx.arc(x, y, Math.abs(w), 0, 2 * Math.PI, false)
+        ctx.lineWidth=width
+        ctx.strokeStyle=cS
+        ctx.fillStyle=cF
         ctx.stroke()
         ctx.fill()
 

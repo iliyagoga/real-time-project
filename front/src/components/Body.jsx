@@ -8,13 +8,12 @@ import Modalca from "./modals/Modal";
 
 
 const Body =observer(()=>{
-    const r=canvasstore.getClients()
     return <>
-        <ToolBar></ToolBar>
+        <ToolBar ></ToolBar>
         <SettingBar></SettingBar>
         <Canvas></Canvas>
-        <UsersList usernames={r}></UsersList>
-        <Modalca></Modalca>
+        <UsersList ></UsersList>
+        {canvasstore.getMode()=='network'&&<Modalca></Modalca>}
         </>
 })
 export default Body

@@ -24,6 +24,7 @@ export default class Rect extends Tools{
         this.canvas.removeEventListener('touchend',this.second)
         this.canvas.removeEventListener('touchmove',this.third)
         this.canvas.removeEventListener('touchstart',this.first)
+        if(canvasstore.getMode()=='network')
         this.socket.send(JSON.stringify({
             method:'draw',
             id:  this.id,
@@ -33,10 +34,12 @@ export default class Rect extends Tools{
                 x: this.startX,
                 y: this.startY,
                 w: this.width,
-                h: this.height
+                h: this.height,
+                colorS: toolstore._strokeColor,
+                colorF: toolstore._fillColor,
+                width: toolstore._lineWidth
             }
         }))
-        
 
     }
     mouseDownHandler(e){
@@ -55,7 +58,12 @@ export default class Rect extends Tools{
             this.startY= e.changedTouches[0].clientY-e.target.offsetTop
         }
         this.saved=this.canvas.toDataURL()
-        
+        if(canvasstore.getMode()=='network'){
+        this.socket.send(JSON.stringify({
+            method:'start',
+            id:  this.id,
+            username: canvasstore.username,
+        }))}
     }
     mouseMoveHandler(e){
         if(this.mouseDown){
@@ -74,8 +82,7 @@ export default class Rect extends Tools{
             this.width=width
             this.height=height
             this.draw(this.startX,this.startY, width, height)
-        }
-
+    }
     }
     draw(x,y,w,h){
         const img=new Image()
@@ -90,9 +97,12 @@ export default class Rect extends Tools{
         }
 
      }
-     static draw2(ctx, x,y,w,h){
+     static draw2(ctx, x,y,w,h, cS,cF,width){
         ctx.beginPath()
         ctx.rect(x,y,w,h)
+        ctx.lineWidth=width
+        ctx.strokeStyle=cS
+        ctx.fillStyle=cF
         ctx.stroke()
         ctx.fill()
         }

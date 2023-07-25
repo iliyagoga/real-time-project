@@ -7,7 +7,7 @@
 
 canvas {
   border: 2px solid black;
-  background: white;
+  background: rgb(255, 255, 255);
 }
 
 .userlist {
@@ -40,4 +40,4 @@ canvas {
     opacity: 0;
     display: none;
   }
-}/*# sourceMappingURL=canvas.css.map */
+}

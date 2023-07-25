@@ -1,7 +1,8 @@
 import { observer } from "mobx-react-lite"
 import canvasstore from "../store/canvasstore";
 
-const UsersList =observer(({usernames})=>{
+const UsersList =observer(()=>{
+    let usernames=canvasstore.getClients()
     if(usernames.length>0)
     return <div className="userlist">
         {usernames.map((e,i)=>{

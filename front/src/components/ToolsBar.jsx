@@ -7,6 +7,7 @@ import Rect from '../tools/Rect'
 import Circle from '../tools/Circle'
 import Rubber from '../tools/Rubber'
 import Line from '../tools/Line'
+import download from '../utils/download';
 function ToolBar() {
     return <div className="toolbar">
       <div>
@@ -26,11 +27,11 @@ function ToolBar() {
         toolstore.setFillColor(e.target.value)}}/>
       </div>
     <div>
-      <button className='toolbar__bt undo' onClick={()=>{canvasstore.undo()}}>
-      </button>
-      <button className='toolbar__bt redo' onClick={()=>{canvasstore.redo()}}>
-      </button>
-      <button className='toolbar__bt save'>
+      {canvasstore.getMode()=='single'&& <button className='toolbar__bt undo' onClick={()=>{canvasstore.undo()}}>
+      </button>}
+      {canvasstore.getMode()=='single'&& <button className='toolbar__bt redo' onClick={()=>{canvasstore.redo()}}>
+      </button>}
+      <button className='toolbar__bt save' onClick={()=>{download()}}>
       </button>
     </div>
     </div>

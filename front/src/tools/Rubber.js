@@ -39,8 +39,7 @@ export default class Rubber extends Tools{
         }
         else{
             this.ctx.moveTo(e.changedTouches[0].clientX-e.target.offsetLeft, e.changedTouches[0].clientY-e.target.offsetTop)
-        }
-        
+    }
     }
     mouseMoveHandler(e){
         if(this.mouseDown){
@@ -50,6 +49,7 @@ export default class Rubber extends Tools{
             else{
                 this.draw(e.changedTouches[0].clientX-e.target.offsetLeft, e.changedTouches[0].clientY-e.target.offsetTop)
             }
+            if(canvasstore.getMode()=='network')
             this.socket.send(JSON.stringify({
                 method:'draw',
                 id:  this.id,
@@ -59,11 +59,11 @@ export default class Rubber extends Tools{
                     type: 'rubber',
                     x: e.touches===undefined?e.pageX-e.target.offsetLeft:e.changedTouches[0].clientX-e.target.offsetLeft,
                     y: e.touches===undefined?e.pageY-e.target.offsetTop:e.changedTouches[0].clientY-e.target.offsetTop,
+                    width: toolstore.lineWidth
                 }
             }))
         }
         this.c++
-
     }
     draw(x,y){
         this.ctx.lineTo(x,y) 
@@ -72,14 +72,14 @@ export default class Rubber extends Tools{
         this.ctx.stroke()  
 
      }
-    static draw2(ctx, x,y,c){
+    static draw2(ctx, x,y,c,width){
         if(c==0){
             ctx.beginPath()
             ctx.moveTo(x,y)
         }
         ctx.lineTo(x,y) 
         ctx.strokeStyle='white'
-        ctx.lineWidth=toolstore._lineWidth
+        ctx.lineWidth=width
         ctx.stroke()  
 
      }

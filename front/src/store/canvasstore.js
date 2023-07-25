@@ -8,13 +8,20 @@ class Canvasstore{
     undolist=[]
     username=''
     figId=''
+    mode=''
+    modeRoom=false
     constructor(){
         makeAutoObservable(this)
         
     }
-    setCanvas(canvas){
-        this._canvas=canvas
-
+    getCanvas(){
+        return this._canvas
+    }
+    getMode(){
+        return this.mode
+    }
+    getModeRoom(){
+        return this.modeRoom
     }
     getClients(){
         return this.clients
@@ -36,6 +43,16 @@ class Canvasstore{
     }
     getSocket(){
         return this.socket
+    }
+    setCanvas(canvas){
+        this._canvas=canvas
+
+    }
+    setModeRoom(modeRoom){
+        this.modeRoom=modeRoom
+    }
+    setMode(mode){
+        this.mode=mode
     }
     setFigId(figId){
         this.figId=figId
