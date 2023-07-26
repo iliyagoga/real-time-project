@@ -30,7 +30,6 @@ function connectionHandler(ws,msg){
 
 }
 function broadcastConnection(ws,msg){
-    console.log(msg.method)
     aWss.clients.forEach(c=>{
         if(c.id==msg.id){
             c.send(JSON.stringify(msg))
