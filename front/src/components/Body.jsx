@@ -5,6 +5,7 @@ import SettingBar from "./SettingBar";
 import ToolBar from "./ToolsBar";
 import UsersList from "./USersList";
 import Modalca from "./modals/Modal";
+import Alert from "./modals/Alert";
 
 
 const Body =observer(()=>{
@@ -19,6 +20,7 @@ const Body =observer(()=>{
         <Canvas></Canvas>
         <UsersList ></UsersList>
         {canvasstore.getMode()=='network'&&<Modalca></Modalca>}
+        {canvasstore.getUserId()==canvasstore.getActiveId()&& <Alert></Alert>}
         </>
 })
 export default Body

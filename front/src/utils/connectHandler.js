@@ -26,13 +26,30 @@ const connectHandler=(input,handleClose,id)=>{
                 canvasstore.setUserId(msg.c)
               canvasstore.setCClients(msg.c)
               canvasstore.setActiveId(msg.active)
+              if(canvasstore.getUserId()==1){
+                const data =canvasstore.getCanvas().toDataURL()
+                canvasstore.getSocket().send(JSON.stringify({
+                  method: 'update',
+                  id: canvasstore.getSessionid(),
+                  data: data
+
+                }))
+              }
               break
             case 'draw':
               drawHandler(msg, canvasstore.username)
               break
             case 'active':
               canvasstore.setActiveId(msg.aid)
-
+              break
+            case'update':
+              if(canvasstore.getUsername()==input){
+                const img= new Image()
+                img.src=msg.data
+                img.onload=()=>{
+                  canvasstore.getCanvas().getContext('2d').drawImage(img,0,0,canvasstore.getCanvas().width,canvasstore.getCanvas().height)
+                }  
+              }
           }
         }
         handleClose()

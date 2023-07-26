@@ -16,6 +16,9 @@ app.ws('/',(ws,req)=>{
             case 'active':
                 broadcastConnection(ws,msg)
                 break
+            case 'update':
+                broadcastConnection(ws,msg)
+                break
         }
     })
 })
