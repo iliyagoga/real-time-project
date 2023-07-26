@@ -8,6 +8,11 @@ import Modalca from "./modals/Modal";
 
 
 const Body =observer(()=>{
+    if(canvasstore.getMode()=='single'){
+        canvasstore.setUserId(1)
+        canvasstore.setActiveId(1)
+
+    }
     return <>
         <ToolBar ></ToolBar>
         <SettingBar></SettingBar>

@@ -22,10 +22,16 @@ const connectHandler=(input,handleClose,id)=>{
           switch(msg.method){
             case 'connection':
               canvasstore.setClients(msg.username)
+              if(canvasstore.getUsername()==msg.username)
+                canvasstore.setUserId(msg.c)
+              canvasstore.setCClients(msg.c)
+              canvasstore.setActiveId(msg.active)
               break
             case 'draw':
               drawHandler(msg, canvasstore.username)
-
+              break
+            case 'active':
+              canvasstore.setActiveId(msg.aid)
 
           }
         }

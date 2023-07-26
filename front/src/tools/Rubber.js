@@ -22,48 +22,52 @@ export default class Rubber extends Tools{
         this.canvas.addEventListener('touchmove',this.third)
     }
     mouseUpHandler(e){
-        this.mouseDown=false
-        this.canvas.removeEventListener('touchend',this.second)
-        this.canvas.removeEventListener('touchmove',this.third)
-        this.canvas.removeEventListener('touchstart',this.first)
-        
-
+        if(canvasstore.getUserId()==canvasstore.getActiveId()){
+            this.mouseDown=false
+            this.canvas.removeEventListener('touchend',this.second)
+            this.canvas.removeEventListener('touchmove',this.third)
+            this.canvas.removeEventListener('touchstart',this.first)
+        }
     }
     mouseDownHandler(e){
-        this.c=0
-        e.preventDefault();
-        this.mouseDown=true
-        this.ctx.beginPath()
-        if(e.touches===undefined){
-            this.ctx.moveTo(e.pageX-e.target.offsetLeft, e.pageY-e.target.offsetTop)
-        }
-        else{
-            this.ctx.moveTo(e.changedTouches[0].clientX-e.target.offsetLeft, e.changedTouches[0].clientY-e.target.offsetTop)
-    }
-    }
-    mouseMoveHandler(e){
-        if(this.mouseDown){
+        if(canvasstore.getUserId()==canvasstore.getActiveId()){
+            this.c=0
+            e.preventDefault();
+            this.mouseDown=true
+            this.ctx.beginPath()
             if(e.touches===undefined){
-                this.draw(e.pageX-e.target.offsetLeft, e.pageY-e.target.offsetTop)
+                this.ctx.moveTo(e.pageX-e.target.offsetLeft, e.pageY-e.target.offsetTop)
             }
             else{
-                this.draw(e.changedTouches[0].clientX-e.target.offsetLeft, e.changedTouches[0].clientY-e.target.offsetTop)
+                this.ctx.moveTo(e.changedTouches[0].clientX-e.target.offsetLeft, e.changedTouches[0].clientY-e.target.offsetTop)
             }
-            if(canvasstore.getMode()=='network')
-            this.socket.send(JSON.stringify({
-                method:'draw',
-                id:  this.id,
-                username: canvasstore.username,
-                figure:{
-                    c: this.c,
-                    type: 'rubber',
-                    x: e.touches===undefined?e.pageX-e.target.offsetLeft:e.changedTouches[0].clientX-e.target.offsetLeft,
-                    y: e.touches===undefined?e.pageY-e.target.offsetTop:e.changedTouches[0].clientY-e.target.offsetTop,
-                    width: toolstore.lineWidth
-                }
-            }))
         }
-        this.c++
+    }
+    mouseMoveHandler(e){
+        if(canvasstore.getUserId()==canvasstore.getActiveId()){
+            if(this.mouseDown){
+                if(e.touches===undefined){
+                    this.draw(e.pageX-e.target.offsetLeft, e.pageY-e.target.offsetTop)
+                }
+                else{
+                    this.draw(e.changedTouches[0].clientX-e.target.offsetLeft, e.changedTouches[0].clientY-e.target.offsetTop)
+                }
+                if(canvasstore.getMode()=='network')
+                this.socket.send(JSON.stringify({
+                    method:'draw',
+                    id:  this.id,
+                    username: canvasstore.username,
+                    figure:{
+                        c: this.c,
+                        type: 'rubber',
+                        x: e.touches===undefined?e.pageX-e.target.offsetLeft:e.changedTouches[0].clientX-e.target.offsetLeft,
+                        y: e.touches===undefined?e.pageY-e.target.offsetTop:e.changedTouches[0].clientY-e.target.offsetTop,
+                        width: toolstore.lineWidth
+                    }
+                }))
+            }
+            this.c++
+        }
     }
     draw(x,y){
         this.ctx.lineTo(x,y) 

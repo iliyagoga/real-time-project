@@ -20,60 +20,64 @@ export default class Line extends Tools{
         this.canvas.addEventListener('touchmove',this.third)
     }
     mouseUpHandler(e){
-        this.mouseDown=false
-        this.canvas.removeEventListener('touchend',this.second)
-        this.canvas.removeEventListener('touchmove',this.third)
-        this.canvas.removeEventListener('touchstart',this.first)
-        if(canvasstore.getMode()=='network')
-        this.socket.send(JSON.stringify({
-            method:'draw',
-            id:  this.id,
-            username: canvasstore.username,
-            figure:{
-                type: 'line',
-                x: this.currentX,
-                y: this.currentY,
-                sx: this.startX,
-                sy: this.startY,
-                color: toolstore._strokeColor,
-                width: toolstore._lineWidth
-            }
-        }))
-
-
+        if(canvasstore.getUserId()==canvasstore.getActiveId()){
+            this.mouseDown=false
+            this.canvas.removeEventListener('touchend',this.second)
+            this.canvas.removeEventListener('touchmove',this.third)
+            this.canvas.removeEventListener('touchstart',this.first)
+            if(canvasstore.getMode()=='network')
+            this.socket.send(JSON.stringify({
+                method:'draw',
+                id:  this.id,
+                username: canvasstore.username,
+                figure:{
+                    type: 'line',
+                    x: this.currentX,
+                    y: this.currentY,
+                    sx: this.startX,
+                    sy: this.startY,
+                    color: toolstore._strokeColor,
+                    width: toolstore._lineWidth
+                }
+            }))
+        }
     }
     mouseDownHandler(e){
-        this.ctx.lineWidth=toolstore._lineWidth
-        this.ctx.strokeStyle=toolstore._strokeColor
-        e.preventDefault();
-        this.mouseDown=true
-        if(e.touches===undefined){
-            this.startX=e.pageX-e.target.offsetLeft
-            this.startY=e.pageY-e.target.offsetTop
-        }
-        else{
-            this.startX= e.changedTouches[0].clientX-e.target.offsetLeft
-            this.startY= e.changedTouches[0].clientY-e.target.offsetTop
-        }
-        this.saved=this.canvas.toDataURL()
-    }
-    mouseMoveHandler(e){
-        if(this.mouseDown){
-            let currentX
-            let currentY
+        if(canvasstore.getUserId()==canvasstore.getActiveId()){
+            this.ctx.lineWidth=toolstore._lineWidth
+            this.ctx.strokeStyle=toolstore._strokeColor
+            e.preventDefault();
+            this.mouseDown=true
             if(e.touches===undefined){
-                currentX=e.pageX-e.target.offsetLeft
-                currentY=e.pageY-e.target.offsetTop
+                this.startX=e.pageX-e.target.offsetLeft
+                this.startY=e.pageY-e.target.offsetTop
             }
             else{
-                currentX= e.changedTouches[0].clientX-e.target.offsetLeft
-                currentY= e.changedTouches[0].clientY-e.target.offsetTop
+                this.startX= e.changedTouches[0].clientX-e.target.offsetLeft
+                this.startY= e.changedTouches[0].clientY-e.target.offsetTop
             }
-            this.currentX=currentX
-            this.currentY=currentY
-            this.draw(currentX,currentY)
-
-    }}
+            this.saved=this.canvas.toDataURL()
+        }
+    }
+    mouseMoveHandler(e){
+        if(canvasstore.getUserId()==canvasstore.getActiveId()){
+            if(this.mouseDown){
+                let currentX
+                let currentY
+                if(e.touches===undefined){
+                    currentX=e.pageX-e.target.offsetLeft
+                    currentY=e.pageY-e.target.offsetTop
+                }
+                else{
+                    currentX= e.changedTouches[0].clientX-e.target.offsetLeft
+                    currentY= e.changedTouches[0].clientY-e.target.offsetTop
+                }
+                this.currentX=currentX
+                this.currentY=currentY
+                this.draw(currentX,currentY)
+            }
+        }
+    }
     draw(cX,cY){
         const img=new Image()
         img.src=this.saved

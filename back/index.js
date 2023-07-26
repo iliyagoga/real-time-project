@@ -13,7 +13,7 @@ app.ws('/',(ws,req)=>{
             case 'draw':
                 broadcastConnection(ws,msg)
                 break
-            case 'start':
+            case 'active':
                 broadcastConnection(ws,msg)
                 break
         }
@@ -22,10 +22,12 @@ app.ws('/',(ws,req)=>{
 function connectionHandler(ws,msg){
     ws.id=msg.id
     msg.c=[...aWss.clients].length
+    msg.active=1
     broadcastConnection(ws,msg)
 
 }
 function broadcastConnection(ws,msg){
+    console.log(msg.method)
     aWss.clients.forEach(c=>{
         if(c.id==msg.id){
             c.send(JSON.stringify(msg))

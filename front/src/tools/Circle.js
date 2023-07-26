@@ -20,58 +20,63 @@ export default class Rect extends Tools{
         this.canvas.addEventListener('touchmove',this.third)
     }
     mouseUpHandler(e){
-        this.mouseDown=false
-        this.canvas.removeEventListener('touchend',this.second)
-        this.canvas.removeEventListener('touchmove',this.third)
-        this.canvas.removeEventListener('touchstart',this.first)
-        if(canvasstore.getMode()=='network')
-        this.socket.send(JSON.stringify({
-            method:'draw',
-            id:  this.id,
-            username: canvasstore.username,
-            figure:{
-                type: 'circle',
-                x: this.startX,
-                y: this.startY,
-                w: Math.abs(this.width),
-                colorS: toolstore._strokeColor,
-                colorF: toolstore._fillColor,
-                width: toolstore._lineWidth
-                
+        if(canvasstore.getUserId()==canvasstore.getActiveId()){
+            this.mouseDown=false
+            this.canvas.removeEventListener('touchend',this.second)
+            this.canvas.removeEventListener('touchmove',this.third)
+            this.canvas.removeEventListener('touchstart',this.first)
+            if(canvasstore.getMode()=='network')
+            this.socket.send(JSON.stringify({
+                method:'draw',
+                id:  this.id,
+                username: canvasstore.username,
+                figure:{
+                    type: 'circle',
+                    x: this.startX,
+                    y: this.startY,
+                    w: Math.abs(this.width),
+                    colorS: toolstore._strokeColor,
+                    colorF: toolstore._fillColor,
+                    width: toolstore._lineWidth 
+                }
             }
-        }))
+            ))
+        }
     }
     mouseDownHandler(e){{
-        this.ctx.lineWidth=toolstore._lineWidth
-        this.ctx.strokeStyle=toolstore._strokeColor
-        this.ctx.fillStyle=toolstore._fillColor
-        e.preventDefault();
-        this.mouseDown=true
-        this.ctx.beginPath()
-        if(e.touches===undefined){
-            this.startX=e.pageX-e.target.offsetLeft
-            this.startY=e.pageY-e.target.offsetTop
-        }
-        else{
-            this.startX= e.changedTouches[0].clientX-e.target.offsetLeft
-            this.startY= e.changedTouches[0].clientY-e.target.offsetTop
-        }
-        this.saved=this.canvas.toDataURL()
-    }}
-    mouseMoveHandler(e){
-        if(this.mouseDown){
-            let currentX
+        if(canvasstore.getUserId()==canvasstore.getActiveId()){
+            this.ctx.lineWidth=toolstore._lineWidth
+            this.ctx.strokeStyle=toolstore._strokeColor
+            this.ctx.fillStyle=toolstore._fillColor
+            e.preventDefault();
+            this.mouseDown=true
+            this.ctx.beginPath()
             if(e.touches===undefined){
-                currentX=e.pageX-e.target.offsetLeft
+                this.startX=e.pageX-e.target.offsetLeft
+                this.startY=e.pageY-e.target.offsetTop
             }
             else{
-                currentX= e.changedTouches[0].clientX-e.target.offsetLeft
+                this.startX= e.changedTouches[0].clientX-e.target.offsetLeft
+                this.startY= e.changedTouches[0].clientY-e.target.offsetTop
             }
-            let width =currentX-this.startX
-            this.width=width
-            this.draw(this.startX,this.startY, width)
+            this.saved=this.canvas.toDataURL()
+        }}
+    }
+    mouseMoveHandler(e){
+        if(canvasstore.getUserId()==canvasstore.getActiveId()){
+            if(this.mouseDown){
+                let currentX
+                if(e.touches===undefined){
+                    currentX=e.pageX-e.target.offsetLeft
+                }
+                else{
+                    currentX= e.changedTouches[0].clientX-e.target.offsetLeft
+                }
+                let width =currentX-this.startX
+                this.width=width
+                this.draw(this.startX,this.startY, width)
+            }
         }
-        
     }
     draw(x,y,w){
         const img=new Image()

@@ -1,6 +1,9 @@
 import {makeAutoObservable} from 'mobx'
 class Canvasstore{
     _canvas=null
+    userid=1
+    activeId=null
+    cclients=null
     socket=null
     sessionid=null
     clients=[]
@@ -13,6 +16,25 @@ class Canvasstore{
     constructor(){
         makeAutoObservable(this)
         
+    }
+    getCClients(){
+        return this.cclients
+    }
+    setCClients(c){
+        this.cclients=c
+    }
+    getActiveId(){
+        return this.activeId
+    }
+    setActiveId(id){
+        this.activeId=id
+    }
+    getUserId(){
+        return this.userid
+    }
+    setUserId(id){
+        this.userid=id
+
     }
     getCanvas(){
         return this._canvas
