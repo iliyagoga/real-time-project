@@ -52,15 +52,13 @@ const connectHandler=(input,handleClose,id)=>{
               break
             case 'draw':
               drawHandler(msg, canvasstore.username)
-              clearTimeout(r)
               break
             case 'active':
               canvasstore.setActiveId(msg.aid)
-              if(msg.check)
-                canvasstore.setCClients(canvasstore.getCClients()-1)
               if(canvasstore.getActiveId()==canvasstore.getUserId()){
                    r = setTimeout(() => {
                       next()
+                      clearTimeout(r)
                   }, 30000);
                 }
               break
@@ -74,15 +72,20 @@ const connectHandler=(input,handleClose,id)=>{
               }
               break
             case 'leave':
-              if(canvasstore.getUserId()>msg.idu){
-                if(canvasstore.getUserId()==canvasstore.getActiveId()){
-                  canvasstore.setActiveId(canvasstore.getActiveId()-1)
-                }
+              if(msg.idu< canvasstore.getUserId()){
                 canvasstore.setUserId(canvasstore.getUserId()-1)
-                canvasstore.setCClients(canvasstore.getCClients()-1)
               }
-              console.log(canvasstore.getUserId(),canvasstore.getActiveId())
-              next(true)
+              canvasstore.setCClients(canvasstore.getCClients()-1)
+              if(canvasstore.getActiveId()>=canvasstore.getCClients()){
+                canvasstore.setActiveId(1)
+              }
+              else{
+                canvasstore.setActiveId(canvasstore.getActiveId()+1)
+              }
+              console.log(canvasstore.getUserId(),canvasstore.getActiveId(),canvasstore.getCClients(),canvasstore.getClients())
+              
+
+              
           }
         }
         handleClose()

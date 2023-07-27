@@ -14,7 +14,6 @@ const Body =observer(()=>{
         canvasstore.setUserId(1)
         canvasstore.setActiveId(1)
     }
-    console.log(canvasstore.getUserId(),canvasstore.getActiveId())
     return <>
         <ToolBar ></ToolBar>
         <SettingBar></SettingBar>
